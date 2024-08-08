@@ -1,6 +1,7 @@
 # Verificar se uma string é uma palíndromo
 
 import string
+import time
 
 
 palavra = input("Digite uma palavra qualquer: ")
@@ -12,4 +13,4 @@ if palavra != inversa:
 else:
     print('É UM PALINDROMO')
 
-
+input("ENTER PARA SAIR")
