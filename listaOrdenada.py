@@ -56,14 +56,3 @@ print("Listas Intercaladas: \n")
 print(intercalada)
 
 input("::::: ENTER para sair :::::")
-
-
-
-
-
-
-
-
-
-
-
