@@ -7,7 +7,7 @@
 
 # entrada de dados lista 1
 
-import time
+
 
 lista1 = list() # sem argumentos cria uma lista vazia
 
