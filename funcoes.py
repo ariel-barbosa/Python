@@ -13,14 +13,14 @@ def calcular_moda(lista):
 				moda = [elemento]
 				maior_frequencia = frequencia
 			elif:
-				frequencia == maior_frequencia(moda.append(elemento))
-				return moda, maior_frequencia
+			requencia == maior_frequencia(moda.append(elemento))
+			return moda, maior_frequencia
 # Entrada dos dados
 
-lista=list()
+lista = list()
 i = 1
 while i<=10:
-	elem = int(input("Digite um elemento da lista:”)"
+	elem = int(input("Digite um elemento da lista: "))
 	lista.append(elem)
 	i+=1
 
