@@ -26,13 +26,16 @@ print(
 f"Nome: {nome}\nTelefone: {telefone}\n"
 f"Email: {email}\nAniversário: {aniversário}\n"
 )
+
 def pede_nome_arquivo():
 return input("Nome do arquivo: ")
+
 def pesquisa(nome):mnome = nome.lower()
 for p, e in enumerate(agenda):
 if e[0].lower() == mnome:
 return p
 return None
+
 def novo():
 global agenda, alterada
 nome = pede_nome()
@@ -44,6 +47,7 @@ email = pede_email()
 aniversário = pede_aniversário()
 agenda.append([nome, telefone, email, aniversário])
 alterada = True
+
 def confirma(operação):
 while True:
 opção = input(f"Confirma {operação} (S/N)? ").upper()
@@ -51,6 +55,7 @@ if opção in "SN":
 return opção
 else:
 print("Resposta inválida. Escolha S ou N.")
+
 def apaga():
 global agenda, alterada
 nome = pede_nome()
@@ -60,6 +65,7 @@ if confirma("apagamento") == "S":
 del agenda[p]
 alterada = Trueelse:
 print("Nome não encontrado.")
+
 def altera():
 global alterada
 p = pesquisa(pede_nome())
@@ -74,11 +80,13 @@ nome = pede_nome(nome) # Se nada for digitado, mantém o valor
 telefone = pede_telefone(telefone)
 email = pede_email(email)
 aniversário = pede_aniversário(aniversário)
+
 if confirma("alteração") == "S":
 agenda[p] = [nome, telefone, email, aniversário]
 alterada = True
 else:
 print("Nome não encontrado.")
+
 def lista():
 print("\nAgenda\n\n\------")
 # Usamos a função enumerate para obter a posição na agenda
