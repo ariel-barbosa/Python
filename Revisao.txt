@@ -95,9 +95,12 @@ for posição, e in enumerate(agenda):
 print(f"\nPosição: {posição}")
 mostra_dados(e[0], e[1], e[2], e[3])
 print("\------\n")
+
 def lê_última_agenda_gravada():
-última = última_agenda()if última is not None:
+última = última_agenda()
+if última is not None:
 leia_arquivo(última)
+
 def última_agenda():
 try:
 arquivo = open("ultima agenda.dat", "r", encoding="utf-8")
@@ -106,10 +109,12 @@ arquivo.close()
 except FileNotFoundError:
 return None
 return última
+
 def atualiza_última(nome):
 arquivo = open("ultima agenda.dat", "w", encoding="utf-8")
 arquivo.write(f"{nome}\n")
 arquivo.close()
+
 def leia_arquivo(nome_arquivo):
 global agenda, alterada
 arquivo = open(nome_arquivo, "r", encoding="utf-8")
@@ -119,6 +124,8 @@ nome, telefone, email, aniversário = l.strip().split("#")
 agenda.append([nome, telefone, email, aniversário])
 arquivo.close()
 alterada = False
+
+
 def lê():
 global alterada
 if alterada:
@@ -126,11 +133,14 @@ print(
 "Você não salvou a lista desde a última alteração. Deseja gravá-la
 agora?"
 )
-if confirma("gravação") == "S":grava()
+if confirma("gravação") == "S":
+grava()
 print("Ler\n---")
 nome_arquivo = pede_nome_arquivo()
 leia_arquivo(nome_arquivo)
 atualiza_última(nome_arquivo)
+
+
 def ordena():
 global alterada
 # Você pode ordenar a lista como mostrado no livro
@@ -138,6 +148,7 @@ global alterada
 # Ou combinar o método sort do Python com lambdas para
 # definir a chave da lista
 # agenda.sort(key=lambda e: return e[0])
+
 fim = len(agenda)
 while fim > 1:
 i = 0
@@ -153,6 +164,8 @@ i += 1
 if not trocou:
 break
 alterada = True
+
+
 def grava():
 global alterada
 if not alterada:
@@ -174,6 +187,8 @@ if inicio <= valor <= fim:
 return valor
 except ValueError:
 print("Valor inválido, favor digitar entre {inicio} e {fim}")
+
+
 def menu():
 print("""
 1 - Novo
@@ -186,7 +201,8 @@ print("""
 0 - Sai
 """)
 print(f"\nNomes na agenda: {len(agenda)} Alterada: {alterada}\n")
-return valida_faixa_inteiro("Escolha uma opção: ", 0, 7)lê_última_agenda_gravada()
+return valida_faixa_inteiro("Escolha uma opção: ", 0, 7)
+lê_última_agenda_gravada()
 while True:
 opção = menu()
 if opção == 0:
