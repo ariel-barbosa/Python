@@ -1,89 +1,56 @@
-# agenda
-import nome
-
-# criando lista 'agenda'
 agenda = []
-
-# Variável para marcar uma alteração na agenda
 alterada = False
 
-
-# função pede nome
-# determina o padrão de nome que o usuario deve digitar
-def pede_nome(padrao = ""):
+def pede_nome(padrao=""):
     nome = input("Nome: ")
     if nome == "":
         nome = padrao
-        return nome
+    return nome
 
-# determina o padrão de telefone que o usuario deve digitar
-def pede_telefone(padrao = ""):
+def pede_telefone(padrao=""):
     telefone = input("Telefone: ")
     if telefone == "":
         telefone = padrao
-        return telefone
+    return telefone
 
-# determina o padrão de email que o usuario deve digitar
-def pede_email(padrao = ""):
-    email = input("Email: ")
-    if email == "":
-        email = padrao
-        return email
+def mostra_dados(nome, telefone):
+    print(f"Nome: {nome} Telefone: {telefone}")
 
-
-# determina o padrão de aniversario que o usuario deve digitar
-def pede_aniversário(padrao=""):
-    aniversario = input("Data de aniversário: ")
-    if aniversario == "":
-        aniversário = padrao
-        return aniversario
-
-
-# mostra os dados do usuario
-def mostra_dados(nome, telefone, email, aniversario):
-    print(
-        f"Nome: {nome}\nTelefone: {telefone}\n"
-        f"Email: {email}\nAniversário: {aniversario}\n"
-    )
-
-# funcao que pede o nome do arquivo
 def pede_nome_arquivo():
-    return input("Nome do Arquivo: ")
+    return input("Nome do arquivo: ")
 
 def pesquisa(nome):
     mnome = nome.lower()
     for p, e in enumerate(agenda):
         if e[0].lower() == mnome:
             return p
-            return None
+    return None
 
 def novo():
     global agenda, alterada
     nome = pede_nome()
-    if pesquisa() is not None:
-        print("Nome já existe!")
-        return
-        telefone = pede_telefone()
-        agenda.append([nome, telefone, email, aniversario])
-        alterada = True
+    telefone = pede_telefone()
+    agenda.append([nome, telefone])
+    alterada = True
 
 def confirma(operacao):
     while True:
         opcao = input(f"Confirma {operacao} (S/N)? ").upper()
         if opcao in "SN":
-            return opcao
+            return opcao == "S"
         else:
-            print("Resposta invalida. Escolha S ou N. ")
+            print("Resposta inválida. Escolha S ou N.")
 
 def apaga():
     global agenda, alterada
     nome = pede_nome()
     p = pesquisa(nome)
-    if p is not None and confirma("apagamento") == "S":
-        del agenda[p]
-        alterada = True
+    if p is not None:
+        if confirma("apagamento"):
+            del agenda[p]
+            alterada = True
     else:
-        print("Nome não encontrado... ")
+        print("Nome não encontrado.")
 
 def altera():
     global alterada
@@ -91,28 +58,119 @@ def altera():
     if p is not None:
         nome = agenda[p][0]
         telefone = agenda[p][1]
-        email = agenda[p][2]
-        aniversário = agenda[p][3]
         print("Encontrado:")
-        mostra_dados(nome, telefone, email, aniversário)
+        mostra_dados(nome, telefone)
         nome = pede_nome(nome)  # Se nada for digitado, mantém o valor
         telefone = pede_telefone(telefone)
-        email = pede_email(email)
-        aniversário = pede_aniversário(aniversário)
-
-        if confirma("alteração") == "S":
-            agenda[p] = [nome, telefone, email, aniversário]
+        if confirma("alteração"):
+            agenda[p] = [nome, telefone]
             alterada = True
-        else:
-            print("Nome não encontrado.")
-
+    else:
+        print("Nome não encontrado.")
 
 def lista():
-    print("\nAgenda\n\n\------")
+    print("\nAgenda\n\n------")
+    for posicao, e in enumerate(agenda):
+        print(f"Posição: {posicao} ", end="")
+        mostra_dados(e[0], e[1])
+    print("------\n")
 
-    # Usamos a função enumerate para obter a posição na agenda
-    for posicao, 
+def lê_ultima_agenda_gravada():
+    ultima = ultima_agenda()
+    if ultima is not None:
+        leia_arquivo(ultima)
 
+def ultima_agenda():
+    try:
+        with open("ultima_agenda.dat", "r", encoding="utf-8") as arquivo:
+            ultima = arquivo.readline().strip()
+        return ultima
+    except FileNotFoundError:
+        return None
+
+def atualiza_ultima(nome):
+    with open("ultima_agenda.dat", "w", encoding="utf-8") as arquivo:
+        arquivo.write(f"{nome}\n")
+
+def leia_arquivo(nome_arquivo):
+    global agenda, alterada
+    with open(nome_arquivo, "r", encoding="utf-8") as arquivo:
+        agenda = [linha.strip().split("#") for linha in arquivo.readlines()]
+    alterada = False
+
+def lê():
+    global alterada
+    if alterada:
+        print("Você não salvou a lista desde a última alteração. Deseja gravá-la agora?")
+        if confirma("gravação"):
+            grava()
+    print("Ler\n---")
+    nome_arquivo = pede_nome_arquivo()
+    leia_arquivo(nome_arquivo)
+    atualiza_ultima(nome_arquivo)
+
+def ordena():
+    global alterada
+    agenda.sort(key=lambda e: e[0].lower())
+    alterada = True
+
+def grava():
+    global alterada
+    if not alterada:
+        print("Você não alterou a lista. Deseja gravá-la mesmo assim?")
+        if not confirma("gravação"):
+            return
+    print("Gravar\n------")
+    nome_arquivo = pede_nome_arquivo()
+    with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
+        for e in agenda:
+            arquivo.write(f"{e[0]}#{e[1]}\n")
+    atualiza_ultima(nome_arquivo)
+    alterada = False
+
+def valida_faixa_inteiro(pergunta, inicio, fim):
+    while True:
+        try:
+            valor = int(input(pergunta))
+            if inicio <= valor <= fim:
+                return valor
+        except ValueError:
+            print(f"Valor inválido, favor digitar entre {inicio} e {fim}")
+
+def menu():
+    print("""
+1 - Novo
+2 - Altera
+3 - Apaga
+4 - Lista
+5 - Grava
+6 - Lê
+7 - Ordena por nome
+0 - Sai
+""")
+    print(f"\nNomes na agenda: {len(agenda)} Alterada: {alterada}\n")
+    return valida_faixa_inteiro("Escolha uma opção: ", 0, 7)
+
+lê_ultima_agenda_gravada()
+
+while True:
+    opcao = menu()
+    if opcao == 0:
+        break
+    elif opcao == 1:
+        novo()
+    elif opcao == 2:
+        altera()
+    elif opcao == 3:
+        apaga()
+    elif opcao == 4:
+        lista()
+    elif opcao == 5:
+        grava()
+    elif opcao == 6:
+        lê()
+    elif opcao == 7:
+        ordena()
 
 
 
